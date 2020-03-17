@@ -36,7 +36,11 @@ namespace QuartzJobs.Controllers
                 .UsingJobData("triggerParam", "sample trigger2 data")
                 .WithIdentity($"{nameof(SimpleJob)}Trigger2", "Jobs")
                 .StartNow()
-                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(5)).RepeatForever()).Build();
+                .WithDailyTimeIntervalSchedule(x=>x
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(11,41))
+                    .EndingDailyAt(TimeOfDay.HourAndMinuteOfDay(11,42))
+                    .WithIntervalInSeconds(5))
+                .Build();
           
             
             
