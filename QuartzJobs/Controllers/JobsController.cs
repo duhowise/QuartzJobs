@@ -37,9 +37,9 @@ namespace QuartzJobs.Controllers
                 .WithIdentity($"{nameof(SimpleJob)}Trigger2", "Jobs")
                 .StartNow()
                 .WithDailyTimeIntervalSchedule(x=>x
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(11,41))
-                    .EndingDailyAt(TimeOfDay.HourAndMinuteOfDay(11,42))
-                    .WithIntervalInSeconds(5))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(11,54))
+                    .EndingDailyAt(TimeOfDay.HourAndMinuteOfDay(11,55))
+                    .OnDaysOfTheWeek(DayOfWeek.Tuesday).WithIntervalInSeconds(5))
                 .Build();
           
             
