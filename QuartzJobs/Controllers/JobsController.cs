@@ -28,12 +28,7 @@ namespace QuartzJobs.Controllers
 
             await _scheduler.AddJob(simpleJobDetail, true);
 
-            var trigger = TriggerBuilder.Create()
-                .ForJob(simpleJobDetail)
-                .UsingJobData("triggerParam","sample trigger data")
-                .WithIdentity($"{nameof(SimpleJob)}Trigger", "Jobs")
-                .StartNow()
-                .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).WithRepeatCount(5)).Build();
+          
             
             
             var trigger2 = TriggerBuilder.Create()
@@ -47,7 +42,6 @@ namespace QuartzJobs.Controllers
             
             
             
-            await _scheduler.ScheduleJob(trigger);
             await _scheduler.ScheduleJob(trigger2);
             return Ok(simpleJobDetail);
         }
