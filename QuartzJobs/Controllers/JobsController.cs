@@ -25,7 +25,7 @@ namespace QuartzJobs.Controllers
                 Password = "NiceOne"
 
             });
-
+            //save the job
             await _scheduler.AddJob(simpleJobDetail, true);
 
           
