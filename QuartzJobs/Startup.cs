@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using Quartz.Impl;
+using QuartzJobs.Extensions;
 using QuartzJobs.Jobs;
 using QuartzJobs.Services;
 
@@ -48,14 +49,18 @@ namespace QuartzJobs
 
         private IScheduler ConfigureQuartz()
         {
-            var props=new NameValueCollection
-            {
-
-                {"quartz.serializer.type","binary" }
-            };
+            var props = new NameValueCollection();
+            props.AddJsonSerialiser();
+            props.AddAdoDotNetJobStore();
+            props.AddDefaultDataSource();
+            props.AddSqlServerProvider();
+            props.AddConnectionString("Server=.;Integrated Security=true;Initial Catalog = QuartzJobs");
+            props.AddClusteredJobStore();
+            props.AddSqlServerDriverDelegate();
+            
             var factory=new StdSchedulerFactory(props);
             var scheduler = factory.GetScheduler().Result;
-            scheduler.Start().Wait();
+          
             //scheduler.ListenerManager.AddTriggerListener(new TriggerListener(),GroupMatcher<TriggerKey>.GroupEquals("Jobs"));
             scheduler.ListenerManager.AddTriggerListener(new TriggerListener());
             scheduler.ListenerManager.AddJobListener(new JobListener());
@@ -77,7 +82,8 @@ namespace QuartzJobs
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            _quartzScheduler.JobFactory=new AspnetCoreJobFactory(app.ApplicationServices);
+            _quartzScheduler.Start();
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(uiOptions =>
