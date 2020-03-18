@@ -36,7 +36,7 @@ namespace QuartzJobs.Controllers
                 .UsingJobData("triggerParam", "sample trigger2 data")
                 .WithIdentity($"{nameof(SimpleJob)}Trigger2", "Jobs")
                 .StartNow()
-                .WithCronSchedule("0 0/1 * 1/1 * ? *")
+                .WithSimpleSchedule(x=>x.WithIntervalInSeconds(1).RepeatForever())
                 .Build();
           
             

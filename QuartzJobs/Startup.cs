@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Matchers;
 using QuartzJobs.Jobs;
 using QuartzJobs.Services;
 
@@ -55,6 +56,8 @@ namespace QuartzJobs
             var factory=new StdSchedulerFactory(props);
             var scheduler = factory.GetScheduler().Result;
             scheduler.Start().Wait();
+            //scheduler.ListenerManager.AddTriggerListener(new TriggerListener(),GroupMatcher<TriggerKey>.GroupEquals("Jobs"));
+            scheduler.ListenerManager.AddTriggerListener(new TriggerListener());
             return scheduler;
 
 
