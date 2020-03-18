@@ -36,7 +36,7 @@ namespace QuartzJobs.Controllers
                 .UsingJobData("triggerParam", "sample trigger2 data")
                 .WithIdentity($"{nameof(SimpleJob)}Trigger2", "Jobs")
                 .StartNow()
-                .WithCalendarIntervalSchedule(x=>x.WithIntervalInDays(1).SkipDayIfHourDoesNotExist(true).PreserveHourOfDayAcrossDaylightSavings(true))
+                .WithCronSchedule("0 0/1 * 1/1 * ? *")
                 .Build();
           
             
