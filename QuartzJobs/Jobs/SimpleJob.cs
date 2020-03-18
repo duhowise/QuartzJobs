@@ -1,23 +1,22 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Quartz;
 
 namespace QuartzJobs.Jobs
 {
     public class SimpleJob : IJob
     {
-        public Task Execute(IJobExecutionContext context)
+        private readonly IEmailSender _emailSender;
+
+        public SimpleJob(IEmailSender emailSender)
         {
-            var dataMap = context.MergedJobDataMap;
-            var username = dataMap.GetString("username");
-            var password = dataMap.GetString("password");
-            var triggerData = dataMap.GetString("triggerParam");
-            var user = dataMap.Get("user") as SimpleJobParameter;
-            Debug.WriteLine($"{triggerData} trigger data");
-            Debug.WriteLine($"{username} Username");
-            Debug.WriteLine($"{password} Password");
-            Debug.WriteLine($"{nameof(SimpleJob)} Executed");
-            return Task.CompletedTask;
+            _emailSender = emailSender;
+        }
+
+        public async Task Execute(IJobExecutionContext context)
+        {
+            await _emailSender.SendEmailAsync("some@email.com", "DI", "DI works");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Quartz;
 using Quartz.Impl;
 using QuartzJobs.Jobs;
+using QuartzJobs.Services;
 
 namespace QuartzJobs
 {
@@ -29,6 +31,7 @@ namespace QuartzJobs
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSingleton(provider=>_quartzScheduler);
+            services.AddTransient<IEmailSender,EmailService>();
             services.AddTransient<SimpleJob>();
             services.AddSwaggerGen(swaggerOptions =>
             {
