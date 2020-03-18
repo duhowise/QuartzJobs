@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using Quartz.Impl;
-using Quartz.Impl.Matchers;
 using QuartzJobs.Jobs;
 using QuartzJobs.Services;
 
@@ -30,10 +29,11 @@ namespace QuartzJobs
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddTransient<IEmailSender, EmailService>();
+            services.AddTransient<SimpleJob>(); 
             services.AddSingleton(provider=>_quartzScheduler);
-            services.AddTransient<IEmailSender,EmailService>();
-            services.AddTransient<SimpleJob>();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
             services.AddSwaggerGen(swaggerOptions =>
             {
                 swaggerOptions.SwaggerDoc("v1",new OpenApiInfo{Title = "Jobs Api",Version = "v1"});
@@ -59,6 +59,7 @@ namespace QuartzJobs
             //scheduler.ListenerManager.AddTriggerListener(new TriggerListener(),GroupMatcher<TriggerKey>.GroupEquals("Jobs"));
             scheduler.ListenerManager.AddTriggerListener(new TriggerListener());
             scheduler.ListenerManager.AddJobListener(new JobListener());
+            scheduler.ListenerManager.AddSchedulerListener(new SchedulerListener());
             return scheduler;
 
 
