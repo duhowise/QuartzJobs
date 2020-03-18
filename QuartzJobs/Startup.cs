@@ -58,6 +58,7 @@ namespace QuartzJobs
             scheduler.Start().Wait();
             //scheduler.ListenerManager.AddTriggerListener(new TriggerListener(),GroupMatcher<TriggerKey>.GroupEquals("Jobs"));
             scheduler.ListenerManager.AddTriggerListener(new TriggerListener());
+            scheduler.ListenerManager.AddJobListener(new JobListener());
             return scheduler;
 
 
